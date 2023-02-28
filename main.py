@@ -17,7 +17,7 @@ import import_from_excel
 #                            'muscle_target': 'Пресс'})
 # dataBase.add_new_exercise({'name_exercise': 'Отжимания от пола',
 #                            'muscle_target': 'Грудные'})
-# dataBase.add_new_exercise({'name_exercise': 'Французский жим стоя',
+# dataBase.add_new_exercise({'name_exercise': 'Французcкий жим стоя',
 #                            'muscle_target': 'Трицепс'})
 # dataBase.add_new_exercise({'name_exercise': 'Тяга к подбородку',
 #                            'muscle_target': 'Плечи'})
@@ -36,23 +36,27 @@ import import_from_excel
 #                            'type_': 'о'})
 
 #
-# f = dataBase.Training.select(dataBase.Training.week,
-#                              dataBase.Training.weight,
-#                              dataBase.Training.repeat,
-#                              dataBase.Training.exercise,
-#                              dataBase.Exercise.muscle_target).join(dataBase.Exercise)
+f = dataBase.Training.select(dataBase.Training.week,
+                             dataBase.Training.weight,
+                             dataBase.Training.repeat,
+                             dataBase.Training.exercise,
+                             dataBase.Exercise.muscle_target).join(dataBase.Exercise)
 
-# f = pd.DataFrame(list(f.dicts()))
-# print(f)
-# table = pd.pivot_table(f, index=['week', 'muscle_target'], aggfunc={'repeat': np.sum,
-#                                                                     'weight': np.mean})
-# table['ton'] = table['repeat'] * table['weight']
-# print(table)
+f = pd.DataFrame(list(f.dicts()))
+print(f)
+f['kg'] = f['repeat'] * f['weight']
+table = pd.pivot_table(f, index=['week', 'muscle_target'], aggfunc={'repeat': np.sum,
+                                                                    'weight': np.sum,
+                                                                    'kg': np.sum})
+
+table['weight'] = table['kg'] / table['repeat']
+
+print(table.xs('Трицепс', level=1))
 
 
 # import_from_excel.import_from_excel()
 
-f = dataBase.Training.select()
-t = dataBase.Exercise.select()
-print(list(t.dicts()))
-print(pd.DataFrame(list(f.dicts()))['exercise'])
+# f = dataBase.Training.select()
+#
+# frame = pd.DataFrame(list(f.dicts()))
+# print()
