@@ -43,7 +43,7 @@ f = dataBase.Training.select(dataBase.Training.week,
                              dataBase.Exercise.muscle_target).join(dataBase.Exercise)
 
 f = pd.DataFrame(list(f.dicts()))
-print(f)
+# print(f)
 f['kg'] = f['repeat'] * f['weight']
 table = pd.pivot_table(f, index=['week', 'muscle_target'], aggfunc={'repeat': np.sum,
                                                                     'weight': np.sum,
@@ -51,7 +51,7 @@ table = pd.pivot_table(f, index=['week', 'muscle_target'], aggfunc={'repeat': np
 
 table['weight'] = table['kg'] / table['repeat']
 
-print(table.xs('Трицепс', level=1))
+print(table.xs(3, level=0))
 
 
 # import_from_excel.import_from_excel()
