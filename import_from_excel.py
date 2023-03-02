@@ -1,5 +1,5 @@
 import pandas as pd
-from dataBase import add_new_training
+from dataBase import add_new_training_in_database
 
 
 def import_from_excel():
@@ -8,11 +8,7 @@ def import_from_excel():
                       'Дата': 'date', 'Вес': 'weight', 'Повт.': 'repeat',
                       'Отдых': 'recreation', '№ подхода': 'number', 'Тип подхода': 'type_'}, inplace=True)
 
-    # print(f.rename(columns={'Упражнение': 'ntrtgij'}))
-
     f['date'] = f['date'].apply(lambda x: x.date())
-
-    print(f.to_dict(orient='records'))
-    l = f.to_dict(orient='records')
-    add_new_training(l)
+    list_traning_dict = f.to_dict(orient='records')
+    add_new_training_in_database(list_traning_dict)
 

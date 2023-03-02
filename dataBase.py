@@ -50,12 +50,16 @@ def add_new_muscle_in_database(data: dict | list[dict]) -> None:
     try:
         Muscle.insert(data).execute()
     except:
-        print('Данные уже есть в базе')
+        print('Данная группа мышц уже есть в базе')
 
 
-def add_new_exercise(data: dict) -> None:
-    Exercise.insert(data).execute()
+def add_new_exercise_in_database(data: dict) -> None:
+    try:
+        Exercise.insert(data).execute()
+    except:
+        print('Данное упражнение уже есть в базе')
 
 
-def add_new_training(data: dict | list[dict]) -> None:
-    print(Training.insert_many(data).execute())
+def add_new_training_in_database(data: dict | list[dict]) -> None:
+    print(Training.insert_many(data).on_conflict_ignore().execute())
+
