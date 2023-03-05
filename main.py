@@ -42,7 +42,7 @@ f = dataBase.Training.select(dataBase.Training.week,
                              dataBase.Training.exercise,
                              dataBase.Exercise.muscle_target).join(dataBase.Exercise)
 
-# import_from_excel.import_from_excel()
+import_from_excel.import_from_excel()
 
 
 f = pd.DataFrame(list(f.dicts()))
@@ -55,7 +55,7 @@ print(table)
 table['mean_weight'] = table[('kg', 'sum')] / table[('repeat', 'sum')]
 table.drop(columns='weight', inplace=True)
 
-print(table.xs('Бицепс', level=1))
+# print(table.xs('Плечи', level=1))
 
 
 
