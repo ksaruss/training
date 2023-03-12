@@ -55,7 +55,7 @@ print(table)
 table['mean_weight'] = table[('kg', 'sum')] / table[('repeat', 'sum')]
 table.drop(columns='weight', inplace=True)
 
-# print(table.xs('Плечи', level=1))
+print(table.xs('Грудные', level=1))
 
 
 
