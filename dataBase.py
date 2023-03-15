@@ -17,6 +17,16 @@ class Exercise(BaseModel):
     muscle_target = ForeignKeyField(Muscle, to_field='name_muscle')
 
 
+class Exercise_coeff(BaseModel):
+    name_exercise = ForeignKeyField(Exercise, to_field='name_exercise')
+    week = IntegerField(default=1)
+    base_weight = IntegerField(default=0)
+    coeff_weight = FloatField(default=1)
+
+    class Meta:
+        primary_key = CompositeKey('name_exercise', 'week')
+
+
 class Training(BaseModel):
     id = IntegerField(primary_key=True)
     week = IntegerField()
@@ -29,35 +39,45 @@ class Training(BaseModel):
     type_ = CharField()
 
 
-class CalcMaxRepeat(BaseModel):
+class CalcMaxWeightOneRepeat(BaseModel):
     id = AutoField()
     week = IntegerField()
-    exercise = ForeignKeyField(Exercise, to_field='id')
+    exercise = ForeignKeyField(Exercise, to_field='name_exercise')
+    type_ = CharField()
     test_weight = FloatField()
     repeat = IntegerField()
-    calc_max_repeat = FloatField()
-
-
-def add_in_database(table: BaseModel, data: dict | list[dict]) -> None:
-    table.insert_many(data).on_conflict_replace().execute()
+    calc_max_weight_one_repeat = FloatField()
 
 
 def create_database() -> None:
-    db.create_tables([Muscle, Exercise, Training, CalcMaxRepeat])
+    db.create_tables([Muscle, Exercise, Exercise_coeff, Training, CalcMaxWeightOneRepeat])
 
 
 def add_new_muscle_in_database(data: dict | list[dict]) -> None:
-    try:
-        Muscle.insert(data).execute()
-    except:
-        print('Данная группа мышц уже есть в базе')
+    if isinstance(data, dict):
+        data = [data]
+    for muscle in data:
+        try:
+            new_row = Muscle.create(name_muscle=muscle['name_muscle'])
+            print(f'Группа мышц "{muscle["name_muscle"]}" добавлена в базу')
+        except IntegrityError:
+            print(f'Группа мышц "{muscle["name_muscle"]}" уже есть в базе')
 
 
 def add_new_exercise_in_database(data: dict) -> None:
     try:
-        Exercise.insert(data).execute()
-    except:
-        print('Данное упражнение уже есть в базе')
+        new_row = Exercise.create(name_exercise=data['name_exercise'], muscle_target=data['muscle_target'])
+        print(f'Упражнение "{data["name_exercise"]}" добавлено в базу')
+    except IntegrityError:
+        print(f'Упражнение "{data["name_exercise"]}" уже есть в базе')
+
+
+def add_new_exercise_coeff_in_database(data: dict) -> None:
+    try:
+        new_row = Exercise_coeff.create(name_exercise=data['name_exercise'], week=data['week'],
+                                        base_weight=data['base_weight'], coeff_weight=['coeff_weight'])
+    except IntegrityError:
+        print('fffff')
 
 
 def add_new_training_in_database(data: dict | list[dict]) -> None:
