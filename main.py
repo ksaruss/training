@@ -15,7 +15,7 @@ class MainWindows(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.pushButton.clicked.connect(self.start)
-        self.ui.listWidget.addItem('15')
+        self.gg()
         self.ui.listWidget.clicked.connect(self.hdfud)
         self.ui.action_add_edit.triggered.connect(self.gg)
 
@@ -26,7 +26,9 @@ class MainWindows(QMainWindow):
         print(self.ui.listWidget.currentIndex())
 
     def gg(self):
-        print('action')
+        q = dataBase.Muscle.select()
+        for i in q:
+            self.ui.listWidget.addItem(str(i))
 
 app = QApplication()
 windows = MainWindows()
