@@ -44,8 +44,8 @@ class CalcMaxWeightOneRepeat(BaseModel):
     week = IntegerField()
     exercise = ForeignKeyField(Exercise, to_field='name_exercise')
     type_ = CharField()
-    test_weight = FloatField()
-    repeat = IntegerField()
+    test_weight = FloatField(null=True)
+    repeat = IntegerField(null=True)
     calc_max_weight_one_repeat = FloatField()
 
 
@@ -68,6 +68,7 @@ def add_new_exercise_in_database(data: dict) -> None:
     try:
         new_row = Exercise.create(name_exercise=data['name_exercise'], muscle_target=data['muscle_target'])
         print(f'Упражнение "{data["name_exercise"]}" добавлено в базу')
+        new_row_coeff = Exercise_coeff.create(**data)
     except IntegrityError:
         print(f'Упражнение "{data["name_exercise"]}" уже есть в базе')
 
@@ -83,3 +84,6 @@ def add_new_exercise_coeff_in_database(data: dict) -> None:
 def add_new_training_in_database(data: dict | list[dict]) -> None:
     print(Training.insert_many(data).on_conflict_ignore().execute())
 
+
+def add_new_calc_max_weight_one_repeat(data: dict) -> None:
+    new_row = CalcMaxWeightOneRepeat.create(**data)
