@@ -40,7 +40,6 @@ class Training(BaseModel):
 
 
 class CalcMaxWeightOneRepeat(BaseModel):
-    id = AutoField()
     week = IntegerField()
     exercise = ForeignKeyField(Exercise, to_field='name_exercise')
     type_ = CharField()
@@ -75,8 +74,7 @@ def add_new_exercise_in_database(data: dict) -> None:
 
 def add_new_exercise_coeff_in_database(data: dict) -> None:
     try:
-        new_row = Exercise_coeff.create(name_exercise=data['name_exercise'], week=data['week'],
-                                        base_weight=data['base_weight'], coeff_weight=['coeff_weight'])
+        new_row = Exercise_coeff.create(**data)
     except IntegrityError:
         print('fffff')
 

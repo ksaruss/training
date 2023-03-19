@@ -30,7 +30,7 @@ class Ui_MainAddEditExercise(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.lineEdit = QLineEdit(MainAddEditExercise)
         self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.setMinimumSize(QSize(100, 0))
+        self.lineEdit.setMinimumSize(QSize(200, 0))
 
         self.gridLayout.addWidget(self.lineEdit, 1, 4, 1, 1)
 
