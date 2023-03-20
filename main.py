@@ -1,6 +1,6 @@
 import queries_in_database
 from ui_base.gui_app import start_gui_app
-
+import matplotlib.pyplot as plt
 import math
 import dataBase
 import import_from_excel
@@ -49,9 +49,9 @@ f = dataBase.Training.select(dataBase.Training.week,
                              dataBase.Training.repeat,
                              dataBase.Training.exercise,
                              dataBase.Exercise.muscle_target,
-                             dataBase.Exercise_coeff.base_weight,
-                             dataBase.Exercise_coeff.coeff_weight,
-                             dataBase.CalcMaxWeightOneRepeat.calc_max_weight_one_repeat) \
+                             dataBase.Exercise_coeff.base_weight.alias('B_W'),
+                             dataBase.Exercise_coeff.coeff_weight.alias('C_W'),
+                             dataBase.CalcMaxWeightOneRepeat.calc_max_weight_one_repeat.alias('MWR')) \
     .join(dataBase.Exercise) \
     .join(dataBase.Exercise_coeff) \
     .join(dataBase.CalcMaxWeightOneRepeat, JOIN.LEFT_OUTER,
@@ -62,18 +62,23 @@ f = pd.DataFrame(list(f.dicts()))
 
 l = f['exercise'].unique()
 
-# f.set_index(['week', 'exercise'], inplace=True)
+f.set_index(['week'], inplace=True)
+
+new_df = pd.DataFrame()
+
+for i in l:
+    f.loc[f['exercise'] == i] = f.loc[f['exercise'] == i].fillna(method='ffill')
 
 
-print(f.loc[f['muscle_target'] == 'Бицепс'][45:50])
-# f['calc_max_weight_one_repeat'].fillna(method="ffill", inplace=True)
+
+
 print(f.loc[f['muscle_target'] == 'Бицепс'][45:50])
 f['kg'] = f['repeat'] * f['weight']
-f['cor_w'] = (f['weight'] + f['base_weight']) * f['coeff_weight'] * f['repeat']
+f['cor_w'] = (f['weight'] + f['B_W']) * f['C_W'] * f['repeat']
 
 
 def calc_inten(df):
-    coeff = df['weight'] / df['calc_max_weight_one_repeat']
+    coeff = df['weight'] / df['MWR']
     return round(0.36 + 0.0015 * math.exp((coeff - 0.71) / 0.035) + 0.65 * math.exp((coeff - 0.71) / 0.16), 9)
 
 
@@ -86,7 +91,7 @@ table = pd.pivot_table(f, index=['week', 'muscle_target'], aggfunc={'repeat': np
                                                                     'kg': np.sum,
                                                                     'cor_w': np.sum,
                                                                     'int': np.sum,
-                                                                    'calc_max_weight_one_repeat': np.mean})
+                                                                    'MWR': np.mean})
 
 table['mean_weight'] = table['kg'] / table['repeat']
 table['mean_weigth_corr'] = table['cor_w'] / table['repeat']
@@ -97,7 +102,12 @@ print('Бицепс', table.xs('Бицепс', level=1))
 print('Трицепс', table.xs('Трицепс', level=1))
 print('Пресс', table.xs('Пресс', level=1))
 
-start_gui_app()
+# start_gui_app()
 
 # queries_in_database.get_qu(['Пресс', 'Ноги'], ['Отжимания от пола'], 4, 5)
+
+
+print(table.pivot_table(index='week', aggfunc={'cor_w': np.sum,
+                                         'int': np.sum,
+                                         }))
 

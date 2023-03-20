@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>476</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>476</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Add_Edit">
+    <property name="title">
+     <string>&amp;Add/Edit</string>
+    </property>
+    <addaction name="action_Add_Edit_new_group_mucsle"/>
+    <addaction name="action_Add_Edit_new_exercise"/>
+    <addaction name="action_Add_Edit_new_traning"/>
+    <addaction name="action_Import_traning_from_excel"/>
+    <addaction name="action_Add_Edit_weight_coeff"/>
+   </widget>
+   <addaction name="menu_Add_Edit"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_Add_Edit_new_group_mucsle">
+   <property name="text">
+    <string>&amp;Add/Edit new group mucsle</string>
+   </property>
+  </action>
+  <action name="action_Add_Edit_new_exercise">
+   <property name="text">
+    <string>&amp;Add/Edit new exercise</string>
+   </property>
+  </action>
+  <action name="action_Add_Edit_new_traning">
+   <property name="text">
+    <string>&amp;Add/Edit new traning</string>
+   </property>
+  </action>
+  <action name="action_Import_traning_from_excel">
+   <property name="text">
+    <string>&amp;Import traning from excel</string>
+   </property>
+  </action>
+  <action name="action_Add_Edit_weight_coeff">
+   <property name="text">
+    <string>&amp;Add/Edit weight coeff</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
